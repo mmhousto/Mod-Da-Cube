@@ -25,11 +25,12 @@ public class Cube : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
         GetRandomValues();
+        GetRandomBGColor();
     }
     void Start()
     {
         cam = Camera.main;
-        cam.backgroundColor = ReturnRandomColor();
+        cam.backgroundColor = randBGColor;
 
         transform.position = randPos;
         transform.localScale = Vector3.one * randScale;
@@ -41,7 +42,7 @@ public class Cube : MonoBehaviour
         InvokeRepeating(nameof(GetRotationalSpeed), 0f, 3f);
         InvokeRepeating(nameof(GetRandomScale), 0f, 3f);
         InvokeRepeating(nameof(GetRandomPosition), 0f, 3f);
-        InvokeRepeating(nameof(ChangeBackgroundColor), 0f, 3f);
+        InvokeRepeating(nameof(GetRandomBGColor), 0f, 3f);
     }
     
     void Update()
@@ -53,6 +54,8 @@ public class Cube : MonoBehaviour
         ChangeScale();
 
         ChangePosition();
+
+        ChangeBackgroundColor();
     }
 
     /// <summary>
@@ -85,7 +88,7 @@ public class Cube : MonoBehaviour
     /// <summary>
     /// Gets random color.
     /// </summary>
-    Color ReturnRandomColor()
+    void GetRandomBGColor()
     {
         // Color
         randR = Random.Range(0, 1.0f);
@@ -93,7 +96,6 @@ public class Cube : MonoBehaviour
         randB = Random.Range(0, 1.0f);
         randA = Random.Range(0.33f, 1.0f);
         randBGColor = new Color(randR, randG, randB, randA);
-        return randBGColor;
     }
 
     /// <summary>
@@ -160,6 +162,6 @@ public class Cube : MonoBehaviour
     /// </summary>
     void ChangeBackgroundColor()
     {
-        cam.backgroundColor = ReturnRandomColor();
+        cam.backgroundColor = Color.Lerp(cam.backgroundColor, randBGColor, Time.deltaTime * 0.2f); ;
     }
 }
